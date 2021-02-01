@@ -13,3 +13,4 @@ random(1, 20)
 const length = function (str, maxLength) {
   return str.length <= maxLength;
 }
+length(12, 140)
