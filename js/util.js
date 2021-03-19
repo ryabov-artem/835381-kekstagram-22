@@ -1,21 +1,25 @@
-'use strict';
-
-/* Получаем случайное число */
-const getRandomNumber = (min, max) => {
-  if (min < 0 || max < 0) {
-    return null;
-  } else if (max < min) {
-    return null;
-  } else if ( max == min) {
-    return null;
-  } else {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function getRandomNumber (min, max) {
+  if ((typeof min) == 'number' && (typeof max) == 'number') {
+    if (min == Math.floor(min) && max == Math.floor(max)) {
+      if (min < max && min >= 0 && max >= 0) {
+        return Math.floor(min + Math.random() * (max + 1 - min));
+      }
+    }
   }
-};
+  return 0;
+}
 
-/* Получаем длину строки */
-const getLengthString = (string, length = '140') => (string.length <= length) ? true : false;
+function getRandomElement (array) {
+  let element = getRandomNumber(0, array.length - 1);
+  return array[element];
+}
 
-getLengthString();
 
-export {getRandomNumber};
+function lengthStringCheck (string, maxStringSize) {
+  if ((typeof string) == 'string' && (typeof maxStringSize) == 'number') {
+    return (string.length < maxStringSize);
+  }
+  return false;
+}
+
+export {getRandomNumber, lengthStringCheck, getRandomElement};
