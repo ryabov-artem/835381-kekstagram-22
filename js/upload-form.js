@@ -1,7 +1,5 @@
-import {sendData} from './api.js';
-
 const hashtagsInput = document.querySelector('.text__hashtags');
-const submitForm = document.querySelector('.img-upload__form');
+const submitButton = document.querySelector('.img-upload__submit');
 
 // const MIN_HASHTAG_LENGTH = 3;
 const MAX_HASHTAG_LENGTH = 20;
@@ -40,16 +38,23 @@ hashtagsInput.addEventListener('input', () => {
   hashtagsInput.reportValidity();
 });
 
-submitForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+let hashtagsArray = [];
+submitButton.addEventListener('click', function (evt) {
 
-  const formData = new FormData(evt.target);
+  let hashtags = hashtagsInput.value.split(' ');
+  hashtags.forEach((hashtag) => {
+    hashtagsArray.push(hashtag);
+  });
 
-  sendData(
-    () => onSuccess(),
-    () => () => {
-      alert('Данные заполнены не верно')
-    },
-    new FormData(evt.target),
-  );
+  for (let i = 0; i < hashtagsArray.length; i++) {
+    let newElement = hashtagsArray[i];
+    hashtagsArray.splice(i, 1);
+
+    for (let j = 0; j < hashtagsArray.length; j++) {
+      if (newElement == hashtagsArray[j]) {
+        evt.preventDefault();
+        break;
+      }
+    }
+  }
 });
