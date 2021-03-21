@@ -1,7 +1,9 @@
-const hashtagsInput = document.querySelector('.text__hashtags');
-const submitButton = document.querySelector('.img-upload__submit');
+import {sendData} from './api.js';
 
-const MIN_HASHTAG_LENGTH = 3;
+const hashtagsInput = document.querySelector('.text__hashtags');
+const submitForm = document.querySelector('.img-upload__form');
+
+// const MIN_HASHTAG_LENGTH = 3;
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS_COUNT = 5;
 
@@ -28,7 +30,7 @@ hashtagsInput.addEventListener('input', () => {
       hashtagsInput.setCustomValidity('Введены некорректные символы');
     } else if (hashtag.length > MAX_HASHTAG_LENGTH) {
       hashtagsInput.setCustomValidity('Превышена максимальная длина хэштега');
-    } else if (hashtags.length > 5) {
+    } else if (hashtags.length > MAX_HASHTAGS_COUNT) {
       hashtagsInput.setCustomValidity('Максимальное кол-во хэштегов - 5');
     } else {
       hashtagsInput.setCustomValidity('');
@@ -38,23 +40,16 @@ hashtagsInput.addEventListener('input', () => {
   hashtagsInput.reportValidity();
 });
 
-let hashtagsArray = [];
-submitButton.addEventListener('click', function (evt) {
+submitForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-  let hashtags = hashtagsInput.value.split(' ');
-  hashtags.forEach((hashtag) => {
-    hashtagsArray.push(hashtag);
-  });
+  const formData = new FormData(evt.target);
 
-  for (let i = 0; i < hashtagsArray.length; i++) {
-    let newElement = hashtagsArray[i];
-    hashtagsArray.splice(i, 1);
-
-    for (let j = 0; j < hashtagsArray.length; j++) {
-      if (newElement == hashtagsArray[j]) {
-        evt.preventDefault();
-        break;
-      }
-    }
-  }
+  sendData(
+    () => onSuccess(),
+    () => () => {
+      alert('Данные заполнены не верно')
+    },
+    new FormData(evt.target),
+  );
 });
